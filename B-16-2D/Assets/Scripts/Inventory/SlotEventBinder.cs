@@ -15,6 +15,33 @@ namespace Inventory
             AddEvent(obj, EventTriggerType.Drag, (eventData) => { ui.OnDrag(slot, (PointerEventData)eventData); });
         }
 
+        public static void BindInventoryUIEvent(GameObject obj, InventoryView ui)
+        {
+            AddEvent(obj, EventTriggerType.PointerEnter, delegate { ui.OnEnterInterface(obj); });
+            AddEvent(obj, EventTriggerType.PointerEnter, delegate { ui.OnExitInterface(obj); });
+            
+        }
+
+        public static void BindClickEvent(GameObject obj, InventorySlot slot, InventoryView ui)
+        {
+            AddEvent(obj, EventTriggerType.PointerClick, (eventData) =>
+            {
+                var pointer = eventData as PointerEventData;
+                
+                PointerEventData pointerData = (PointerEventData)eventData;
+                
+                switch (pointerData.button)
+                {
+                    case PointerEventData.InputButton.Left:
+                        ui.OnLeftClick(slot);
+                        break;
+                    case PointerEventData.InputButton.Right:
+                        ui.OnRightClick(slot);
+                        break;
+                }
+            });
+        }
+
         private static void AddEvent(
             GameObject obj, 
             EventTriggerType type, 
